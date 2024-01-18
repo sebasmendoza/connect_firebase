@@ -2,7 +2,7 @@ import 'package:connect_firebase/models/brew.dart';
 import 'package:connect_firebase/screens/home/brew_list.dart';
 import 'package:connect_firebase/services/auth.dart';
 import 'package:connect_firebase/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

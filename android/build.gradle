@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // Agrega la dependencia para el complemento de servicios de Google
-        classpath 'com.google.gms:google-services:4.4.0'
+//        classpath 'com.google.gms:google-services:4.4.0'
 
     }
 }
