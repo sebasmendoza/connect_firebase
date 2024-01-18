@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -15,7 +14,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,32 +27,37 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool isOpened = false;
-
-  void toggleDoor() {
-    setState(() {
-      isOpened = !isOpened;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(widget.title),
+        title: Text(title),
       ),
-      body: Center(
+      body: DoorStateWidget(),
+    );
+  }
+}
+
+class DoorStateWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: FirebaseFirestore.instance.collection('group').doc('zJcb2Ks87S5RTcs6Twfq')
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        bool isOpened = snapshot.data!['door'] == 1;
+
+        return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -72,12 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  toggleDoor();
-                  updateDoorState();
+                  updateDoorState(isOpened ? 0 : 1);
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    isOpened ? Colors.green : Colors.red,
+                    isOpened ? Colors.red : Colors.green,
                   ),
                   minimumSize: MaterialStateProperty.all<Size>(
                     Size(200.0, 50.0),
@@ -85,31 +87,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 child: Text(
                   isOpened ? 'Cerrar puerta' : 'Abrir puerta',
-                  style: TextStyle(fontSize: 20.0,  color: Colors.white),
+                  style: TextStyle(fontSize: 20.0, color: Colors.white),
                 ),
               ),
             ],
           ),
-        ),// This trailing comma makes auto-formatting nicer for build methods.
+        );
+      },
     );
   }
 }
 
-Future<void> updateDoorState() async {
+Future<void> updateDoorState(int newState) async {
   try {
-    // Referencia a la colección 'group' y al documento que contiene el campo 'door'.
     CollectionReference groupCollection = FirebaseFirestore.instance.collection('group');
-    DocumentReference documentRef = groupCollection.doc('zJcb2Ks87S5RTcs6Twfq'); // Reemplaza 'your_document_id' con el ID real de tu documento.
+    DocumentReference documentRef = groupCollection.doc('zJcb2Ks87S5RTcs6Twfq');
 
-    // Realiza la actualización del campo 'door' a 1.
-    await documentRef.update({'door': 0});
+    await documentRef.update({'door': newState});
 
     print('Campo "door" actualizado correctamente.');
   } catch (e) {
     print('Error al actualizar el campo "door": $e');
   }
 }
-
-
-
-
