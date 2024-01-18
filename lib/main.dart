@@ -1,45 +1,3 @@
-// import 'package:connect_firebase/screens/wrapper.dart';
-// import 'package:connect_firebase/services/auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:connect_firebase/models/user.dart';
-//
-// import 'firebase_options.dart';
-// import 'package:firebase_core/firebase_core.dart';
-//
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamProvider<Member?>.value(
-//       value: AuthService().user,
-//       initialData: null,
-//       child: MaterialApp(
-//         // home: Wrapper(),
-//         home: Container(
-//           child: FloatingActionButton(onPressed: () {  },
-//             child: Text("Hello"),
-//           ),
-//         )
-//       ),
-//     );
-//   }
-// }
-//
-
-// ------------------------------------------------------------------------------------
-
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -63,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -81,11 +39,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  bool isOpened = false;
 
-  void _incrementCounter() {
+  void toggleDoor() {
     setState(() {
-      _counter++;
+      isOpened = !isOpened;
     });
   }
 
@@ -93,32 +51,46 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Colors.blue,
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _incrementCounter();
-          updateDoorState();
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              isOpened
+                  ? Image.asset(
+                'assets/door_open.png',
+                width: 200.0,
+                height: 200.0,
+              )
+                  : Image.asset(
+                'assets/door_close.png',
+                width: 200.0,
+                height: 200.0,
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  toggleDoor();
+                  updateDoorState();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    isOpened ? Colors.green : Colors.red,
+                  ),
+                  minimumSize: MaterialStateProperty.all<Size>(
+                    Size(200.0, 50.0),
+                  ),
+                ),
+                child: Text(
+                  isOpened ? 'Cerrar puerta' : 'Abrir puerta',
+                  style: TextStyle(fontSize: 20.0,  color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
