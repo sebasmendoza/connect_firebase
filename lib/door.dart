@@ -1,6 +1,9 @@
+import 'package:connect_firebase/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_firebase/services/database.dart';
+
+import 'login.dart';
 
 class DoorStateWidget extends StatelessWidget {
   final String? groupId;
@@ -11,6 +14,24 @@ class DoorStateWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Estado de la Puerta'),
+        backgroundColor: Colors.blue,
+        automaticallyImplyLeading: false, // Deshabilita el botón de retroceso predeterminado
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              // Llama a la función de cierre de sesión del servicio de autenticación
+              AuthService().signOut();
+              // Navega a la pantalla de inicio de sesión (puedes ajustar esto según tu estructura de navegación)
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Login(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('group').doc(groupId)

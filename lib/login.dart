@@ -18,6 +18,8 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio de Sesión'),
+        automaticallyImplyLeading: false, // Deshabilita el botón de retroceso predeterminado
+        backgroundColor: Colors.blue,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
