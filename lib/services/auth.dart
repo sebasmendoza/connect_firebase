@@ -13,6 +13,7 @@ class AuthService {
         email: email,
         password: password,
       );
+      // print('Autenticacion correcta: ${result.user}');
       return result.user;
     } catch (e) {
       print('Error al iniciar sesión: $e');

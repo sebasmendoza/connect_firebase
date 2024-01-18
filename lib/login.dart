@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:connect_firebase/services/auth.dart';
+import 'package:connect_firebase/door.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -43,7 +45,7 @@ class _LoginState extends State<Login> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GroupDoorPage(),
+                      builder: (context) => DoorStateWidget(),
                     ),
                   );
                 } else {
