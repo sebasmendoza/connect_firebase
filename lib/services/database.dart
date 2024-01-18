@@ -2,9 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
 
-  final String uid;
-  DatabaseService({ required this.uid });
-
   // Find Group by Email (Group (door) > User (email)) and return Group Id
   Future<String?> findGroupByEmail(String userEmail) async {
     try {
@@ -36,4 +33,18 @@ class DatabaseService {
     }
   }
 
+  Future<void> updateDoorState(int doorState, String? groupId) async {
+    try {
+      CollectionReference groupCollection = FirebaseFirestore.instance
+          .collection('group');
+      DocumentReference documentRef = groupCollection.doc(
+          groupId);
+
+      await documentRef.update({'door': doorState});
+
+      print('Campo "door" actualizado correctamente.');
+    } catch (e) {
+      print('Error al actualizar el campo "door": $e');
+    }
+  }
 }

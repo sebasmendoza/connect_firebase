@@ -1,3 +1,4 @@
+import 'package:connect_firebase/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:connect_firebase/services/auth.dart';
@@ -41,11 +42,14 @@ class _LoginState extends State<Login> {
                 );
 
                 if (user != null) {
+                  // Encontrar Id Grupo basado en email
+                  String? groupId = await DatabaseService().findGroupByEmail(_emailController.text);
+
                   // Navegar a la pantalla donde se puede modificar el estado de la puerta del grupo
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DoorStateWidget(),
+                      builder: (context) => DoorStateWidget(groupId: groupId,),
                     ),
                   );
                 } else {

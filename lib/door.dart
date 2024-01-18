@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connect_firebase/services/database.dart';
 
 class DoorStateWidget extends StatelessWidget {
-  const DoorStateWidget({super.key});
+  final String? groupId;
+  const DoorStateWidget({super.key, required this.groupId});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class DoorStateWidget extends StatelessWidget {
         title: Text('Estado de la Puerta'),
       ),
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('group').doc('zJcb2Ks87S5RTcs6Twfq')
+        stream: FirebaseFirestore.instance.collection('group').doc(groupId)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -38,7 +40,7 @@ class DoorStateWidget extends StatelessWidget {
                 SizedBox(height: 20.0),
                 ElevatedButton(
                   onPressed: () {
-                    updateDoorState(isOpened ? 0 : 1);
+                    DatabaseService().updateDoorState(isOpened ? 0 : 1, groupId);
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -59,18 +61,5 @@ class DoorStateWidget extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-Future<void> updateDoorState(int newState) async {
-  try {
-    CollectionReference groupCollection = FirebaseFirestore.instance.collection('group');
-    DocumentReference documentRef = groupCollection.doc('zJcb2Ks87S5RTcs6Twfq');
-
-    await documentRef.update({'door': newState});
-
-    print('Campo "door" actualizado correctamente.');
-  } catch (e) {
-    print('Error al actualizar el campo "door": $e');
   }
 }
