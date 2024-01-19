@@ -86,6 +86,7 @@ class DoorStateWidget extends StatelessWidget {
   }
 }
 
+// Send command to arduino
 Future<void> enviarComando(String comando) async {
   final response = await http.get(Uri.parse('http://192.168.0.177/data=$comando'));
   if (response.statusCode == 200) {
