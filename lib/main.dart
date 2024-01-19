@@ -1,3 +1,4 @@
+import 'package:connect_firebase/web.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -43,7 +44,7 @@ class MyHomePage extends StatelessWidget {
       //   automaticallyImplyLeading: false, // Deshabilita el botón de retroceso predeterminado
       // ),
       // body: DoorStateWidget(),
-      body: Login(),
+      body: WebPage(),
     );
   }
 }

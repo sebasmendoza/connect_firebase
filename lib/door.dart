@@ -2,7 +2,7 @@ import 'package:connect_firebase/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connect_firebase/services/database.dart';
-
+import 'package:http/http.dart' as http;
 import 'login.dart';
 
 class DoorStateWidget extends StatelessWidget {
@@ -62,6 +62,7 @@ class DoorStateWidget extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     DatabaseService().updateDoorState(isOpened ? 0 : 1, groupId);
+                    enviarComando(isOpened ? '0' : '1');
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -82,5 +83,14 @@ class DoorStateWidget extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+Future<void> enviarComando(String comando) async {
+  final response = await http.get(Uri.parse('http://192.168.0.177/data=$comando'));
+  if (response.statusCode == 200) {
+    print('Comando enviado con éxito: $comando');
+  } else {
+    print('Error al enviar el comando: ${response.statusCode}');
   }
 }

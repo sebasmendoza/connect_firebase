@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:connect_firebase/services/auth.dart';
 import 'package:connect_firebase/door.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   @override
@@ -73,6 +74,10 @@ class _LoginState extends State<Login> {
               },
               child: Text('Iniciar Sesión'),
             ),
+            ElevatedButton(
+                onPressed: () => enviarComando('1'),
+                child: Text('I/O Test')
+            )
           ],
         ),
       ),
@@ -80,6 +85,11 @@ class _LoginState extends State<Login> {
   }
 }
 
-
-
-
+Future<void> enviarComando(String comando) async {
+  final response = await http.get(Uri.parse('http://192.168.0.177/data=$comando'));
+  if (response.statusCode == 200) {
+    print('Comando enviado con éxito: $comando');
+  } else {
+    print('Error al enviar el comando: ${response.statusCode}');
+  }
+}
